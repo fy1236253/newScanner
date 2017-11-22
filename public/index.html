@@ -64,7 +64,7 @@
     var uploadNum = 0;//错误次数累计
     // 这里是简单的调用，其余api请参考文档
     weui.uploader('#uploaderCustom', {
-        url: '/uploadImg',
+        url: '/v1/uploadImg',
         auto: false,
         fileVal: 'img',
         onQueued: function () {
@@ -74,7 +74,7 @@
             if (res.errMsg == "success") {
                 weui.loading('loading').hide();
                 weui.toast('操作成功', 2000);
-                window.location.href = "/consumer?uuid=" + res.uuid
+                window.location.href = "/v1/consumer?uuid=" + res.uuid
             } else {
                 if (uploadNum >= 1) {
                     weui.alert('你的图片已提交人工审核！请耐心等待');

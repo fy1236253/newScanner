@@ -66,7 +66,7 @@ func getuser(w http.ResponseWriter, r *http.Request) {
 func ConfigWebHTTP() {
 
 	// 用户上传图片
-	http.HandleFunc("/scanner", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/v1/scanner", func(w http.ResponseWriter, r *http.Request) {
 		getuser(w, r)
 		var f string // 模板文件路径
 		f = filepath.Join(g.Root, "/public", "index.html")
@@ -91,7 +91,7 @@ func ConfigWebHTTP() {
 	})
 
 	// 上传图片后  返回识别结果
-	http.HandleFunc("/consumer", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/v1/consumer", func(w http.ResponseWriter, r *http.Request) {
 		var f string // 模板文件路径
 		queryValues, _ := url.ParseQuery(r.URL.RawQuery)
 		uuid := queryValues.Get("uuid")
@@ -124,7 +124,7 @@ func ConfigWebHTTP() {
 		}
 		return
 	})
-	http.HandleFunc("/credits", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/v1/credits", func(w http.ResponseWriter, r *http.Request) {
 
 		queryValues, _ := url.ParseQuery(r.URL.RawQuery)
 		var f string // 模板文件路径
@@ -148,7 +148,7 @@ func ConfigWebHTTP() {
 		}
 		return
 	})
-	http.HandleFunc("/uploadImg", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/v1/uploadImg", func(w http.ResponseWriter, r *http.Request) {
 		t := time.Now()
 		r.ParseMultipartForm(32 << 20)
 		sess, _ := globalSessions.SessionStart(w, r)
@@ -201,7 +201,7 @@ func ConfigWebHTTP() {
 		log.Println(time.Since(t))
 		return
 	})
-	http.HandleFunc("/hand_operation", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/v1/hand_operation", func(w http.ResponseWriter, r *http.Request) {
 		imgItems := model.GetUploadImgInfo()
 		var f string // 模板文件路径
 		f = filepath.Join(g.Root, "/public", "handOperation.html")
@@ -225,7 +225,7 @@ func ConfigWebHTTP() {
 		}
 		return
 	})
-	http.HandleFunc("/save_jifen_info", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/v1/save_jifen_info", func(w http.ResponseWriter, r *http.Request) {
 		r.ParseForm()
 		uuid := r.FormValue("uuid")
 		sess, _ := globalSessions.SessionStart(w, r)
@@ -244,7 +244,7 @@ func ConfigWebHTTP() {
 		RenderJson(w, result)
 		return
 	})
-	http.HandleFunc("/edit_img", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/v1/edit_img", func(w http.ResponseWriter, r *http.Request) {
 		r.ParseForm()
 		if r.Method == "POST" {
 			log.Println(r.Form)
@@ -253,7 +253,7 @@ func ConfigWebHTTP() {
 				return
 			}
 			model.DeleteUploadImg(uuid)
-			http.Redirect(w, r, "/hand_operation", 302)
+			http.Redirect(w, r, "/v1/hand_operation", 302)
 			return
 		}
 		urlParse, _ := url.ParseQuery(r.URL.RawQuery)

@@ -48,7 +48,7 @@
         $(".edit").click(function () {
             uuid = $(this).parent().siblings().eq(1).text()
             console.log(uuid)
-            window.location.href = "/edit_img?uuid=" + uuid
+            window.location.href = "/v1/edit_img?uuid=" + uuid
         })
     })
     
