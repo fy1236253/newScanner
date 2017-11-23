@@ -55,33 +55,34 @@
             $("#scanner").show();
             $(".scan-ok").hide();
         });
-        // $("#submit").click(function () {
-        //     var uuid = document.getElementById("uuid").value
-        //     $.ajax({
-        //         url: "/save_jifen_info",
-        //         type: "POST",
-        //         data: {
-        //             "uuid": uuid
-        //         },
-        //         success: function (e) {
-        //             if (e.success == "t") {
-        //                 window.location.href = "/credits?score=" + e.result
-        //                 return
-        //             }
-        //             weui.dialog({
-        //                 title: '上传结果',
-        //                 content: '该小票已经上传，请勿重复上传！',
-        //                 buttons: [{
-        //                     label: '确定',
-        //                     type: 'primary',
-        //                     onClick: function () {
-        //                         window.location.href = "/scanner"
-        //                     }
-        //                 }]
-        //             });
-        //         }
-        //     })
-        // })
+        $("#submit").click(function () {
+            window.location.href = "/v1/credits?score=100"
+            // var uuid = document.getElementById("uuid").value
+            // $.ajax({
+            //     url: "/save_jifen_info",
+            //     type: "POST",
+            //     data: {
+            //         "uuid": uuid
+            //     },
+            //     success: function (e) {
+            //         if (e.success == "t") {
+            //             window.location.href = "/credits?score=" + e.result
+            //             return
+            //         }
+            //         weui.dialog({
+            //             title: '上传结果',
+            //             content: '该小票已经上传，请勿重复上传！',
+            //             buttons: [{
+            //                 label: '确定',
+            //                 type: 'primary',
+            //                 onClick: function () {
+            //                     window.location.href = "/scanner"
+            //                 }
+            //             }]
+            //         });
+            //     }
+            // })
+        })
         $("#reload").click(function () {
             window.open("/v1/scanner")
         })

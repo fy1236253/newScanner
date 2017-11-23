@@ -47,7 +47,7 @@ func getuser(w http.ResponseWriter, r *http.Request) {
 		code := queryValues.Get("code") //  摇一摇入口 code 有效
 		state := queryValues.Get("state")
 		if code == "" && state == "" {
-			addr := "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appid + "&redirect_uri=" + url.QueryEscape(fullurl) + "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect"
+			addr := "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appid + "&redirect_uri=" + url.QueryEscape(fullurl) + "&response_type=code&scope=snsapi_base&state=1#wechat_redirect"
 			log.Println("http.Redirect", addr)
 			http.Redirect(w, r, addr, 302)
 			return
@@ -164,7 +164,7 @@ func ConfigWebHTTP() {
 		log.Println(rate)
 		rateInt, _ := strconv.Atoi(rate)
 		var result model.CommonResult
-		if rateInt >= 1 {
+		if rateInt > 1 {
 			//人工处理模块
 			log.Println("save handle img:" + uuid)
 			f, _ := os.Create("public/upload/" + uuid + ".jpg")
@@ -182,7 +182,15 @@ func ConfigWebHTTP() {
 		sourcebuffer := make([]byte, 4*1024*1024) //最大4M
 		n, _ := file.Read(sourcebuffer)
 		base64Str := base64.StdEncoding.EncodeToString(sourcebuffer[:n])
-		res := model.LocalImageRecognition(base64Str)
+		var res *model.IntegralReq
+		recongnition, types := model.BatImageRecognition(base64Str)
+		log.Println(types)
+
+		if types == 2 {
+			res = model.SecondLocalImageRecognition(recongnition)
+		} else {
+			res = model.FirstLocalImageRecognition(recongnition)
+		}
 		result.ErrMsg = "success"
 		if res == nil {
 			//识别有错误  返回错误
@@ -253,7 +261,7 @@ func ConfigWebHTTP() {
 				return
 			}
 			model.DeleteUploadImg(uuid)
-			http.Redirect(w, r, "/v1/hand_operation", 302)
+			http.Redirect(w, r, "/hand_operation", 302)
 			return
 		}
 		urlParse, _ := url.ParseQuery(r.URL.RawQuery)
@@ -280,7 +288,7 @@ func ConfigWebHTTP() {
 		}
 		return
 	})
-	http.HandleFunc("/handle", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/v1/handle", func(w http.ResponseWriter, r *http.Request) {
 		model.ImportDatbase()
 		return
 	})
